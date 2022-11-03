@@ -5,7 +5,7 @@ const unhandled = require('cli-handle-unhandled');
 module.exports = ({ clear = true }) => {
 	unhandled();
 	welcome({
-		title: `csv-sha256-calculator`,
+		title: `csv-sha256`,
 		tagLine: `by mike umeokoli`,
 		description: pkg.description,
 		version: pkg.version,

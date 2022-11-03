@@ -115,11 +115,9 @@ fs.createReadStream(flags.file)
 		console.log('Oops! Something went wrong', err);
 	});
 
-// 	(
-// 	//
-// 	async () => {
-// 		init({ clear });
-// 		input.includes(`help`) && cli.showHelp(0);
-// 		debug && log(flags);
-// 	}
-// )();
+//
+(async () => {
+	init({ clear });
+	input.includes(`help`) && cli.showHelp(0);
+	debug && log(flags);
+})();
