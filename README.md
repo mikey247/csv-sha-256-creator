@@ -24,6 +24,14 @@ cd csv-sha-256-creator
 
 ```bash
   ./index.js -f yourCsvFile.csv
+  OR
+  node index.js -f yourCsvFile.csv
+
+  TO RUN THE DEFAULT TEST CSV
+
+  ./index.js -f
+  OR
+  node index.js -f
 ```
 
 #### New CSV
