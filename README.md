@@ -20,7 +20,7 @@ cd csv-sha-256-creator
 
 #### The current implementation requires user to copy in their csv file to the directory
 
-#### Run the hashing
+#### In your Bash, run the hashing
 
 ```bash
   ./index.js -f ./yourCsvFile.csv
