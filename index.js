@@ -20,8 +20,6 @@ const input = cli.input;
 const flags = cli.flags;
 const { clear, debug } = flags;
 
-console.log(flags);
-
 let json = csvToJson.fieldDelimiter(',').getJsonFromCsv(flags.file);
 
 for (let i = 0; i < json.length; i++) {
@@ -66,6 +64,5 @@ fs.writeFile(`${title}.json`, JSON.stringify(json), () => {
 (async () => {
 	init({ clear });
 	input.includes(`help`) && cli.showHelp(0);
-
 	debug && log(flags);
 })();
