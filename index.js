@@ -8,11 +8,9 @@
  */
 
 const fs = require('fs');
-const csvToJson = require('convert-csv-to-json');
 const crypto = require('crypto');
-const { Parser, parse, parseAsync } = require('json2csv');
+const { Parser } = require('json2csv');
 const csv = require('fast-csv');
-const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 const init = require('./utils/init');
 const cli = require('./utils/cli');
@@ -22,7 +20,6 @@ const input = cli.input;
 const flags = cli.flags;
 const { clear, debug } = flags;
 
-let csvCreator;
 let items = [];
 let NFTs = [];
 let teamName = '';
@@ -47,7 +44,6 @@ fs.createReadStream(flags.file)
 			NFTs.push({ ...line, Team: teamName });
 			//all the data
 			items.push(line);
-			// console.log(NFTs);
 		} else {
 			items.push(line);
 		}
