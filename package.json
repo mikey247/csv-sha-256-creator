@@ -1,0 +1,40 @@
+{
+	"name": "csv-sha256-calculator",
+	"description": "take the CSV provided by the teams, and generate a CHIP-0007 compatible json, calculate the sha256 of the json file and append it to each line in the csv (as a filename.output.csv)",
+	"version": "1.0.0",
+	"license": "UNLICENSED",
+	"bin": {
+		"csv-sha256-calculator": "index.js",
+		"get": "index.js"
+	},
+	"author": {
+		"name": "mike umeokoli",
+		"email": "michaeljunior794@gmail.com",
+		"url": "http://mikey24-7.xyz"
+	},
+	"keywords": [
+		"csv-sha256-calculator",
+		"mike umeokoli"
+	],
+	"files": [
+		"index.js",
+		"utils"
+	],
+	"scripts": {
+		"format": "prettier --write \"./**/*.{js,json}\""
+	},
+	"dependencies": {
+		"chalk": "^4.1.2",
+		"cli-alerts": "^1.2.2",
+		"cli-handle-error": "^4.4.0",
+		"cli-handle-unhandled": "^1.1.1",
+		"cli-meow-help": "^3.1.0",
+		"cli-welcome": "^2.2.2",
+		"convert-csv-to-json": "^1.3.3",
+		"json2csv": "^5.0.7",
+		"meow": "^9.0.0"
+	},
+	"devDependencies": {
+		"prettier": "^2.7.1"
+	}
+}
