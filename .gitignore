@@ -71,8 +71,8 @@ assets/img/.DS_Store
 # VSCode related files #
 # .vscode
 
-final.json
-/final.json
+test.json
+/test.json
 
-final.csv
-/final.csv
+test.output.csv
+/test.output.csv

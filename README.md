@@ -18,24 +18,16 @@ cd csv-sha-256-creator
   npm install
 ```
 
-### The current implementation requires user to copy in their csv file to the directory and then change this line of code in index.js
-
-```
-//line 24
-
-let json = csvToJson.fieldDelimiter(',').getJsonFromCsv('./test.csv');
-
-//change (./test.csv) to the copied csv
-```
+#### The current implementation requires user to copy in their csv file to the directory
 
 #### Run the hashing
 
 ```bash
-  ./index.js
+  ./index.js -f ./yourCsvFile.csv
 ```
 
 #### New CSV
 
 ```
-// An updated csv file final.csv and json file final.json with a new Hash table is created in the directory for your usage
+// An updated csv file yourCsvFile.output.csv and json file yourCsvFile.json with the new Hash colunm is created in the directory for your usage
 ```

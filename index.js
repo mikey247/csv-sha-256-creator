@@ -20,17 +20,23 @@ const input = cli.input;
 const flags = cli.flags;
 const { clear, debug } = flags;
 
-let json = csvToJson.fieldDelimiter(',').getJsonFromCsv('./test.csv');
+console.log(flags);
+
+let json = csvToJson.fieldDelimiter(',').getJsonFromCsv(flags.file);
 
 for (let i = 0; i < json.length; i++) {
 	const hash = crypto
 		.createHash('sha256')
 		.update(JSON.stringify(json[i]))
 		.digest('hex');
-	json[i].Hash = hash;
+	if (json[i].Name !== '') {
+		json[i].Hash = hash;
+	}
 }
 
-fs.writeFile('final.json', JSON.stringify(json), () => {
+let title = flags.file.split('/')[1].split('.')[0];
+
+fs.writeFile(`${title}.json`, JSON.stringify(json), () => {
 	console.log('json writing finished');
 	const fields = [
 		'SeriesNumber',
@@ -48,8 +54,7 @@ fs.writeFile('final.json', JSON.stringify(json), () => {
 	try {
 		const parser = new Parser(opts);
 		const csv = parser.parse(json);
-		// console.log(csv);
-		fs.writeFile('final.csv', csv, () => {
+		fs.writeFile(`${title}.output.csv`, csv, () => {
 			console.log('hashing finished');
 		});
 	} catch (err) {

@@ -24,11 +24,11 @@ const flags = {
 		alias: `v`,
 		desc: `Print CLI version`
 	},
-	type: {
+	file: {
 		type: `string`,
-		alias: `t`,
-		desc: `Get type`,
-		default: 'default values'
+		alias: `f`,
+		desc: `Get file`,
+		default: './test.csv'
 	}
 };
 
