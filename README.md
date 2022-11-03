@@ -18,12 +18,12 @@ cd csv-sha-256-creator
   npm install
 ```
 
-#### The current implementation requires user to copy in their csv file to the directory
+#### The current implementation requires user to copy in their csv file to the directory before running the script
 
-#### In your Bash, run the hashing
+#### In your Bash, run the script
 
 ```bash
-  ./index.js -f ./yourCsvFile.csv
+  ./index.js -f yourCsvFile.csv
 ```
 
 #### New CSV

@@ -32,7 +32,7 @@ for (let i = 0; i < json.length; i++) {
 	}
 }
 
-let title = flags.file.split('/')[1].split('.')[0];
+let title = flags.file.split('.')[0];
 
 fs.writeFile(`${title}.json`, JSON.stringify(json), () => {
 	console.log('json writing finished');
