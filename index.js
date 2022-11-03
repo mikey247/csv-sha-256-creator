@@ -10,7 +10,9 @@
 const fs = require('fs');
 const csvToJson = require('convert-csv-to-json');
 const crypto = require('crypto');
-const { Parser } = require('json2csv');
+const { Parser, parse, parseAsync } = require('json2csv');
+const csv = require('fast-csv');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 
 const init = require('./utils/init');
 const cli = require('./utils/cli');
@@ -20,49 +22,104 @@ const input = cli.input;
 const flags = cli.flags;
 const { clear, debug } = flags;
 
-let json = csvToJson.fieldDelimiter(',').getJsonFromCsv(flags.file);
-
-for (let i = 0; i < json.length; i++) {
-	const hash = crypto
-		.createHash('sha256')
-		.update(JSON.stringify(json[i]))
-		.digest('hex');
-	if (json[i].Name !== '') {
-		json[i].Hash = hash;
-	}
-}
-
+let csvCreator;
+let items = [];
+let NFTs = [];
+let teamName = '';
+const final = [];
 let title = flags.file.split('.')[0];
 
-fs.writeFile(`${title}.json`, JSON.stringify(json), () => {
-	console.log('json writing finished');
-	const fields = [
-		'SeriesNumber',
-		'Filename',
-		'Name',
-		'Description',
-		'Gender',
-		'Attributes',
-		'UUID',
-		'Hash'
-	];
+fs.createReadStream(flags.file)
+	.pipe(csv.parse({ headers: true }))
+	.on('data', line => {
+		if (line['Series Number'].toLowerCase().startsWith('team')) {
+			teamName = line['Series Number'];
+		}
 
-	const opts = { fields };
+		const hash = crypto
+			.createHash('sha256')
+			.update(JSON.stringify(line))
+			.digest('hex');
+		line.Hash = hash;
 
-	try {
+		if (line['Filename']) {
+			//the Valid NFTs
+			NFTs.push({ ...line, Team: teamName });
+			//all the data
+			items.push(line);
+			// console.log(NFTs);
+		} else {
+			items.push(line);
+		}
+	})
+	.on('close', data => {
+		NFTs.map(nft => {
+			const nftData = {
+				format: 'CHIP-0007',
+				name: nft['Name'],
+				description: nft['Description'],
+				minting_tool: nft['Team'],
+				sensitive_content: false,
+				series_number: parseInt(nft['Series Number']),
+				series_total: NFTs.length,
+				attributes: [
+					{
+						trait_type: 'gender',
+						value: nft['Gender']
+					}
+				],
+				collection: {
+					name: 'Zuri NFT Tickets for Free Lunch',
+					id: 'b774f676-c1d5-422e-beed-00ef5510c64d',
+					attributes: [
+						{
+							type: 'description',
+							value: 'Rewards for accomplishments during HNGi9.'
+						}
+					]
+				},
+				hash: nft['Hash']
+			};
+
+			if (nft['Attributes']) {
+				let nftAttributes = nft['Attributes'].split(',');
+
+				nftAttributes.map(attribute => {
+					let attributeKeyValue = attribute.split(':');
+					nftData['attributes'].push({
+						trait_type: attributeKeyValue[0],
+						value: attributeKeyValue[1]
+					});
+				});
+			}
+
+			final.push(nftData);
+		});
+
+		const fields = Object.keys(final[0]);
+
+		const opts = { fields };
+
 		const parser = new Parser(opts);
-		const csv = parser.parse(json);
+		const csv = parser.parse(final);
+
 		fs.writeFile(`${title}.output.csv`, csv, () => {
 			console.log('hashing finished');
 		});
-	} catch (err) {
-		console.error(err);
-	}
-});
 
-//
-(async () => {
-	init({ clear });
-	input.includes(`help`) && cli.showHelp(0);
-	debug && log(flags);
-})();
+		fs.writeFile(`${title}.json`, JSON.stringify(final), () => {
+			console.log('json writing finished');
+		});
+	})
+	.on('error', err => {
+		console.log('Oops! Something went wrong', err);
+	});
+
+// 	(
+// 	//
+// 	async () => {
+// 		init({ clear });
+// 		input.includes(`help`) && cli.showHelp(0);
+// 		debug && log(flags);
+// 	}
+// )();

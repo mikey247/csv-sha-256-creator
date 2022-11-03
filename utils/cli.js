@@ -28,7 +28,7 @@ const flags = {
 		type: `string`,
 		alias: `f`,
 		desc: `Get file`,
-		default: './test.csv'
+		default: 'test.csv'
 	}
 };
 
