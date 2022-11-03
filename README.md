@@ -37,5 +37,5 @@ let json = csvToJson.fieldDelimiter(',').getJsonFromCsv('./test.csv');
 #### New CSV
 
 ```
-// An updated csv file final.csv and json file final.json is created in the directory for your usage
+// An updated csv file final.csv and json file final.json with a new Hash table is created in the directory for your usage
 ```
