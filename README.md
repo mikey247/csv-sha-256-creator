@@ -37,8 +37,8 @@ cd csv-sha-256-creator
 #### New CSV and JSON directory
 
 ```
-// An updated csv file yourCsvFile.output.csv and json file yourCsvFile.json with the new Hash colunm is created in a data directory for your usage
-// An nfts folder is created with files for each nft.
+// An updated csv file yourCsvFile.output.csv and json file yourCsvFile.json with the new Hash colunm is created in a new "data" folder for your usage
+// An "nfts" folder is created with json files for each nft.
 ```
 
 ## ENJOY😎
