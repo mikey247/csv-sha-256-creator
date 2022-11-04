@@ -29,6 +29,7 @@ let title = flags.file.split('.')[0];
 fs.createReadStream(flags.file)
 	.pipe(csv.parse({ headers: true }))
 	.on('data', line => {
+		// handling the first colunm
 		if (line['TEAM NAMES'].toLowerCase().startsWith('team')) {
 			teamName = line['TEAM NAMES'];
 		}
@@ -49,10 +50,12 @@ fs.createReadStream(flags.file)
 		}
 	})
 	.on('close', () => {
+		//create nfts folder
 		fs.mkdir('./nfts', () => {
 			console.log('Created nfts folder for all your NFTs🍾');
 		});
 
+		//Generating CHIP-0007
 		NFTs.map(nft => {
 			const nftData = {
 				Format: 'CHIP-0007',
@@ -83,6 +86,7 @@ fs.createReadStream(flags.file)
 				Hash: nft['Hash']
 			};
 
+			//Handling the attributes section
 			if (nft['Attributes']) {
 				let nftAttributes = nft['Attributes'].split(';');
 
@@ -99,8 +103,10 @@ fs.createReadStream(flags.file)
 				});
 			}
 
+			//pushing each NFT
 			final.push(nftData);
 
+			//creating json files for each of the NFTs
 			fs.writeFile(
 				`nfts/${nftData['Filename']}.json`,
 				JSON.stringify(nftData),
@@ -108,6 +114,7 @@ fs.createReadStream(flags.file)
 			);
 		});
 
+		//Generating the Colunm heads from the JSON
 		const fields = Object.keys(final[0]);
 
 		const opts = { fields };
@@ -115,14 +122,17 @@ fs.createReadStream(flags.file)
 		const parser = new Parser(opts);
 		const csv = parser.parse(final);
 
+		//Creating Data folder for the final csv and JSON registry
 		fs.mkdir('./data', () => {
 			console.log('Created data folder🚀');
 		});
 
+		// Final CSV
 		fs.writeFile(`data/${title}.output.csv`, csv, () => {
 			console.log('Updated CSV created✅⚡---check data folder');
 		});
 
+		//JSON registry
 		fs.writeFile(`data/${title}.json`, JSON.stringify(final), () => {
 			console.log('JSON Registry finished🏃🏾🦧💨--check data folder');
 		});
