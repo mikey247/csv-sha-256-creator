@@ -34,8 +34,11 @@ cd csv-sha-256-creator
   node index.js -f
 ```
 
-#### New CSV
+#### New CSV and JSON directory
 
 ```
-// An updated csv file yourCsvFile.output.csv and json file yourCsvFile.json with the new Hash colunm is created in the directory for your usage
+// An updated csv file yourCsvFile.output.csv and json file yourCsvFile.json with the new Hash colunm is created in a data directory for your usage
+// An nfts folder is created with files for each nft.
 ```
+
+## ENJOY😎

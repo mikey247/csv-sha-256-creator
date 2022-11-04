@@ -29,8 +29,8 @@ let title = flags.file.split('.')[0];
 fs.createReadStream(flags.file)
 	.pipe(csv.parse({ headers: true }))
 	.on('data', line => {
-		if (line['Series Number'].toLowerCase().startsWith('team')) {
-			teamName = line['Series Number'];
+		if (line['TEAM NAMES'].toLowerCase().startsWith('team')) {
+			teamName = line['TEAM NAMES'];
 		}
 
 		const hash = crypto
@@ -48,23 +48,28 @@ fs.createReadStream(flags.file)
 			items.push(line);
 		}
 	})
-	.on('close', data => {
+	.on('close', () => {
+		fs.mkdir('./nfts', () => {
+			console.log('Created nfts folder for all your NFTs🍾');
+		});
+
 		NFTs.map(nft => {
 			const nftData = {
-				format: 'CHIP-0007',
-				name: nft['Name'],
-				description: nft['Description'],
-				minting_tool: nft['Team'],
-				sensitive_content: false,
-				series_number: parseInt(nft['Series Number']),
-				series_total: NFTs.length,
-				attributes: [
+				Format: 'CHIP-0007',
+				Filename: nft['Filename'],
+				Name: nft['Name'],
+				Description: nft['Description'],
+				Minting_tool: nft['Team'],
+				Sensitive_content: false,
+				Series_number: parseInt(nft['Series Number']),
+				Series_total: NFTs.length,
+				Attributes: [
 					{
 						trait_type: 'gender',
 						value: nft['Gender']
 					}
 				],
-				collection: {
+				Collection: {
 					name: 'Zuri NFT Tickets for Free Lunch',
 					id: 'b774f676-c1d5-422e-beed-00ef5510c64d',
 					attributes: [
@@ -74,22 +79,33 @@ fs.createReadStream(flags.file)
 						}
 					]
 				},
-				hash: nft['Hash']
+				UUID: nft['UUID'],
+				Hash: nft['Hash']
 			};
 
 			if (nft['Attributes']) {
-				let nftAttributes = nft['Attributes'].split(',');
+				let nftAttributes = nft['Attributes'].split(';');
 
 				nftAttributes.map(attribute => {
 					let attributeKeyValue = attribute.split(':');
-					nftData['attributes'].push({
-						trait_type: attributeKeyValue[0],
+					nftData['Attributes'].push({
+						trait_type: attributeKeyValue[0]
+							? attributeKeyValue[0].trim()
+							: attributeKeyValue[0],
 						value: attributeKeyValue[1]
+							? attributeKeyValue[1].trim()
+							: attributeKeyValue[1]
 					});
 				});
 			}
 
 			final.push(nftData);
+
+			fs.writeFile(
+				`nfts/${nftData['Filename']}.json`,
+				JSON.stringify(nftData),
+				() => {}
+			);
 		});
 
 		const fields = Object.keys(final[0]);
@@ -99,12 +115,16 @@ fs.createReadStream(flags.file)
 		const parser = new Parser(opts);
 		const csv = parser.parse(final);
 
-		fs.writeFile(`${title}.output.csv`, csv, () => {
-			console.log('hashing finished');
+		fs.mkdir('./data', () => {
+			console.log('Created data folder🚀');
 		});
 
-		fs.writeFile(`${title}.json`, JSON.stringify(final), () => {
-			console.log('json writing finished');
+		fs.writeFile(`data/${title}.output.csv`, csv, () => {
+			console.log('Updated CSV created✅⚡---check data folder');
+		});
+
+		fs.writeFile(`data/${title}.json`, JSON.stringify(final), () => {
+			console.log('JSON Registry finished🏃🏾🦧💨--check data folder');
 		});
 	})
 	.on('error', err => {
